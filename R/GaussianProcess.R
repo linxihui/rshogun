@@ -32,8 +32,13 @@ shogunGP.default <- function(
 	) {
 
 	require(shogun);
-	requireNamespace('kernlab');
-	sigma <- ifelse('automatic' == kpar$sigma, kernlab::sigest(x)[[2]], kpar$sigest);
+	sigma <- kpar$sigma;
+	if('automatic' == sigma) {
+		if ( requireNamespace('kernlab'))
+			sigma <- kernlab::sigest(x)[[2]]
+		else 
+			stop('Package kernlab needed but not installed.');
+		}
 
 	standardize <- NULL;
 	if (scaled) {
